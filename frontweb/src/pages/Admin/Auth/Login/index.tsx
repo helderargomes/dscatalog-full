@@ -3,8 +3,9 @@ import ButtonIcon from "components/ButtonIcon";
 import { useForm } from "react-hook-form";
 
 import "./styles.css";
-import { getAuthData, requestBackendLogin, saveAuthData } from "util/requests";
-import { useState } from "react";
+import { getTokenData, requestBackendLogin, saveAuthData } from "util/requests";
+import { useContext, useState } from "react";
+import { AuthContext } from "AuthContext";
 
 type FormData = {
   username: string;
@@ -12,6 +13,8 @@ type FormData = {
 };
 
 const Login = () => {
+
+  const { setAuthContextData } = useContext(AuthContext);
   
   const [hasError, setHasError] = useState(false);
 
@@ -23,9 +26,11 @@ const Login = () => {
     requestBackendLogin(formData)
       .then((response) => {
         saveAuthData(response.data);
-        const token = getAuthData().access_token;
-        console.log('TOKEN GERADO: ' + token);
-        console.log("SUCESSO", response);
+        setHasError(false);
+        setAuthContextData({
+                authenticated: true,
+                tokenData: getTokenData(),
+              });
         history.push('/admin');
       })
       .catch((error) => {
