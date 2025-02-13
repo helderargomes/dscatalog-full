@@ -1,4 +1,4 @@
-import ProductCrudCard from "components/ProductCrudCard";
+import ProductCrudCard from "pages/Admin/Products/ProductCrudCard";
 
 import "./styles.css";
 import { Link } from "react-router-dom";
@@ -17,6 +17,10 @@ const List = () => {
       {
         id: 2,
         name: "Eletrônicos",
+      },
+      {
+        id: 1,
+        name: "Computadores",
       },
     ],
   };
