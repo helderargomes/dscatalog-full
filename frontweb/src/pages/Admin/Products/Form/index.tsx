@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import "./styles.css";
 import { Product } from "types/product";
-import { requestBackend } from "util/requests";
+import { BASE_URL, requestBackend } from "util/requests";
 import { AxiosRequestConfig } from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -27,10 +27,11 @@ const Form = () => {
       url: "/products",
       data,
       withCredentials: true,
+      baseURL: BASE_URL,
     };
 
-    requestBackend(config).then((response) => {
-      console.log(response.data);
+    requestBackend(config).then(() => {
+      history.push("/admin/products");
     });
   };
 
