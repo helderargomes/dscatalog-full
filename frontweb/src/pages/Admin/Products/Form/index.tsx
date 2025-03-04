@@ -5,12 +5,19 @@ import { BASE_URL, requestBackend } from "util/requests";
 import { AxiosRequestConfig } from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import Select from "react-select";
 
 type UrlParams = {
   productId: string;
 };
 
 const Form = () => {
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
   const { productId } = useParams<UrlParams>();
 
   const isEditing = productId !== "create";
@@ -26,8 +33,7 @@ const Form = () => {
 
   useEffect(() => {
     if (isEditing) {
-      requestBackend({ url: `/products/${productId}` })
-      .then((response) => {
+      requestBackend({ url: `/products/${productId}` }).then((response) => {
         const product = response.data as Product;
 
         setValue("name", product.name);
@@ -42,9 +48,10 @@ const Form = () => {
   const onSubmit = (formData: Product) => {
     const data = {
       ...formData,
-      imgUrl: isEditing ? formData.imgUrl : 
-        "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg",
-      categories: isEditing ? formData.categories :  [{ id: 1, name: "" }],
+      imgUrl: isEditing
+        ? formData.imgUrl
+        : "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg",
+      categories: isEditing ? formData.categories : [{ id: 1, name: "" }],
     };
 
     const config: AxiosRequestConfig = {
@@ -85,6 +92,13 @@ const Form = () => {
                 <div className="invalid-feedback d-block">
                   {errors.name?.message}
                 </div>
+              </div>
+
+              <div className="margin-bottom-30">
+                <Select options={options} 
+                isMulti 
+                classNamePrefix="product-crud-select"                
+                />
               </div>
 
               <div className="margin-bottom-30">
