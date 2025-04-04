@@ -4,9 +4,10 @@ import { AuthContext } from "AuthContext";
 import "bootstrap/js/src/collapse";
 import { useContext, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { getTokenData, isAuthenticated } from "util/auth";
+import { isAuthenticated } from "util/auth";
 import history from "util/history";
 import { removeAuthData } from "util/storage";
+import { getTokenData } from "util/token";
 
 
 
