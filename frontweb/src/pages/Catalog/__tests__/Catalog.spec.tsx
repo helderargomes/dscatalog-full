@@ -2,10 +2,14 @@ import { render, screen, waitFor } from "@testing-library/react";
 import Catalog from "..";
 import { Router } from "react-router-dom";
 import history from "util/history";
+import { server } from "./fixtures"
 
-test(' should render Catalog with products', async () => {
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-    const text = "Fazer login";
+
+test('should render Catalog with products', async () => {
 
     render(
         <Router history={history}>
