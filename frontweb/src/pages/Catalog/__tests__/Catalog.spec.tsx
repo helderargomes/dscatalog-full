@@ -14,7 +14,7 @@ test('should render Catalog with products', async () => {
     render(
         <Router history={history}>
           <Catalog />  
-        </Router>  
+        </Router> 
     );
 
     expect(screen.getByText("Catálogo de produtos")).toBeInTheDocument;
