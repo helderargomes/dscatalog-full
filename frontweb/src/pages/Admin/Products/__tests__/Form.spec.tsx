@@ -3,7 +3,7 @@ import Form from "../Form";
 import history from "util/history";
 import { Router, useParams } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { server } from "./fixtures";
+import { productResponse, server } from "./fixtures";
 import selectEvent from "react-select-event";
 import { ToastContainer} from 'react-toastify';
 
@@ -53,7 +53,7 @@ describe('Product form create tests', () => {
     
     expect(history.location.pathname).toEqual("/admin/products");
 
-    })    
+    });    
 
     test('should show 5 validation messages when just clicking submit', async () => {
         render(
@@ -108,4 +108,52 @@ describe('Product form create tests', () => {
         });
     });
 })
+
+describe('Product form update tests', () => {   
+    beforeEach(() => {
+        (useParams as jest.Mock).mockReturnValue({
+            productId: "2"
+        })
+    });
+   
+    test('should show toast and redirect when submit form correctly', async () => {
+    render(
+        <Router history={history}>
+          <ToastContainer />
+          <Form />  
+        </Router> 
+    );
+
+    await waitFor(() => {
+        const nameInput = screen.getByTestId("name");
+        const priceInput = screen.getByTestId("price");
+        const imgUrlInput = screen.getByTestId("imgUrl");
+        const descriptionInput = screen.getByTestId("description");
+
+        const formElement = screen.getByTestId("form");
+        
+        expect(nameInput).toHaveValue(productResponse.name);
+        expect(priceInput).toHaveValue(String(productResponse.price));
+        expect(imgUrlInput).toHaveValue(productResponse.imgUrl);
+        expect(descriptionInput).toHaveValue(productResponse.description);
+
+        const ids = productResponse.categories.map(x => String(x.id))
+        expect(formElement).toHaveFormValues({categories: ids});
+    });
+
+    const submitButton = screen.getByRole('button', {name: /salvar/i});
+    
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+    const toastElement = screen.getByText("Produto cadastrado com sucesso!");
+    expect(toastElement).toBeInTheDocument();
+        }); 
+    
+    expect(history.location.pathname).toEqual("/admin/products");
+
+    });
+});
+
+
 
